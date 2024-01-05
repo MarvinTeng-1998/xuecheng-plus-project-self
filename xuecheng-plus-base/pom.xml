@@ -9,7 +9,6 @@
         <relativePath>../xuecheng-plus-parent</relativePath>
     </parent>
 
-
     <artifactId>xuecheng-plus-base</artifactId>
 
     <dependencies>
