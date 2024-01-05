@@ -1,10 +1,13 @@
 package com.xuecheng.content.model.dto;
 
+import lombok.Data;
+
 /**
  * @description: 课程查询条件模型类
  * @author: dengbin
  * @create: 2024-01-04 21:45
  **/
+@Data
 public class QueryCourseParamsDto {
 
     // 审核状态
