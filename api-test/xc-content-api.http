@@ -21,7 +21,7 @@ Content-Type: application/json
 {
   "charge": "201000",
   "price": 0,
-  "originalPrice":0,
+  "originalPrice": 0,
   "qq": "22333",
   "wechat": "223344",
   "phone": "13333333",
@@ -36,3 +36,18 @@ Content-Type: application/json
   "grade": "204001",
   "description": ""
 }
+
+### 修改教师
+PUT {{content_host}}/content/courseTeacher
+Content-Type: application/json
+
+{
+  "id": 28,
+  "courseId": 117,
+  "createDate": null,
+  "teacherName": "qqqq",
+  "position": "高级Java教师111",
+  "introduction": "JAVA高级教师111",
+  "photograph": null
+}
+
