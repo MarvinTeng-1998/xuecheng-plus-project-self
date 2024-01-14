@@ -1,0 +1,43 @@
+server:
+  port: 63010
+#微服务配置
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      #      filter:
+      #        strip-prefix:
+      #          enabled: true
+      routes: # 网关路由配置
+        - id: content-api # 路由id，自定义，只要唯一即可
+          # uri: http://127.0.0.1:8081 # 路由的目标地址 http就是固定地址
+          uri: lb://content-api # 路由的目标地址 lb就是负载均衡，后面跟服务名称
+          predicates: # 路由断言，也就是判断请求是否符合路由规则的条件
+            - Path=/content/** # 这个是按照路径匹配，只要以/content/开头就符合要求
+        #          filters:
+        #            - StripPrefix=1
+        - id: system-api
+          # uri: http://127.0.0.1:8081
+          uri: lb://system-api
+          predicates:
+            - Path=/system/**
+        #          filters:
+        #            - StripPrefix=1
+        - id: media-api
+          # uri: http://127.0.0.1:8081
+          uri: lb://media-api
+          predicates:
+            - Path=/media/**
+    #          filters:
+    #            - StripPrefix=1
+    nacos:
+      server-addr: 127.0.0.1:8848
+      discovery:
+        namespace: dev
+        group: xuecheng-plus-project
+# 日志文件配置路径
+logging:
+  config: classpath:log4j2-dev.xml
+
+

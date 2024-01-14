@@ -11,6 +11,12 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/xc_system?serverTimezone=UTC&userUnicode=true&useSSL=false&
     username: root
     password: qwe980130
+  cloud:
+    nacos:
+      server-addr: 127.0.0.1:8848
+      discovery:
+        namespace: dev
+        group: xuecheng-plus-project
 # 日志文件配置路径
 logging:
   config: classpath:log4j2-dev.xml

@@ -78,36 +78,6 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
     @Override
     @Transactional
     public CourseBaseInfoDto createCourseBase(Long companyId, AddCourseDto dto) {
-
-        // // 参数的合法校验
-        // if (StringUtils.isBlank(dto.getName())) {
-        //     XueChengPlusException.cast("课程名称为空");
-        // }
-        //
-        // if (StringUtils.isBlank(dto.getMt())) {
-        //     XueChengPlusException.cast("课程分类为空");
-        // }
-        //
-        // if (StringUtils.isBlank(dto.getSt())) {
-        //     XueChengPlusException.cast("课程分类为空");
-        // }
-        //
-        // if (StringUtils.isBlank(dto.getGrade())) {
-        //     XueChengPlusException.cast("课程等级为空");
-        // }
-        //
-        // if (StringUtils.isBlank(dto.getTeachmode())) {
-        //     XueChengPlusException.cast("教育模式为空");
-        // }
-        //
-        // if (StringUtils.isBlank(dto.getUsers())) {
-        //     XueChengPlusException.cast("适应人群为空");
-        // }
-        //
-        // if (StringUtils.isBlank(dto.getCharge())) {
-        //     XueChengPlusException.cast("收费规则为空");
-        // }
-
         // 向课程基本表course_base写入数据
         CourseBase courseBaseNew = new CourseBase();
         BeanUtils.copyProperties(dto, courseBaseNew);
