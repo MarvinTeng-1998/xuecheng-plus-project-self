@@ -10,13 +10,14 @@ import com.xuecheng.base.model.PageParams;
 import com.xuecheng.base.model.PageResult;
 import com.xuecheng.base.model.RestResponse;
 import com.xuecheng.media.mapper.MediaFilesMapper;
+import com.xuecheng.media.mapper.MediaProcessMapper;
 import com.xuecheng.media.model.dto.QueryMediaParamsDto;
 import com.xuecheng.media.model.dto.UploadFileParamsDto;
 import com.xuecheng.media.model.dto.UploadFileResultDto;
 import com.xuecheng.media.model.po.MediaFiles;
+import com.xuecheng.media.model.po.MediaProcess;
 import com.xuecheng.media.service.MediaFileService;
 import io.minio.*;
-import io.minio.errors.*;
 import io.minio.messages.DeleteError;
 import io.minio.messages.DeleteObject;
 import lombok.extern.slf4j.Slf4j;
@@ -29,8 +30,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -41,7 +40,7 @@ import java.util.stream.Stream;
 /**
  * @author Mr.M
  * @version 1.0
- * @description TODO
+ * @description 媒资文件Service
  * @date 2022/9/10 8:58
  */
 @Service
@@ -64,6 +63,9 @@ public class MediaFileServiceImpl implements MediaFileService {
     @Autowired
     MediaFileService mediaFileService;
 
+    @Autowired
+    MediaProcessMapper mediaProcessMapper;
+
 
     @Override
     public PageResult<MediaFiles> queryMediaFiels(Long companyId, PageParams pageParams, QueryMediaParamsDto queryMediaParamsDto) {
@@ -85,6 +87,15 @@ public class MediaFileServiceImpl implements MediaFileService {
 
     }
 
+    /*
+     * @Description: 上传文件
+     * @Author: dengbin
+     * @Date: 26/1/24 22:43
+     * @param companyId:
+     * @param uploadFileParamsDto:
+     * @param localFilePath:
+     * @return: com.xuecheng.media.model.dto.UploadFileResultDto
+     **/
     @Override
     public UploadFileResultDto uploadFile(Long companyId, UploadFileParamsDto uploadFileParamsDto, String localFilePath) {
         File file = new File(localFilePath);
@@ -97,10 +108,10 @@ public class MediaFileServiceImpl implements MediaFileService {
         String mimeType = getMimeType(extension);
         String defaultFolderPath = getDefaultFolderPath();
         String objectName = defaultFolderPath + fileMd5 + extension;
-
         boolean b = addMediaFilesToMinio(localFilePath, mimeType, bucket_files, objectName);
         uploadFileParamsDto.setFileSize(file.length());
-        // 解决事务失效的问题
+        // 这里要进行两部分的数据处理，一部分是加入到MediaFile数据库中，一部分是加到MediaFileProcess中
+        // 解决事务失效的问题：将自己注入进去来解决事务失效的问题，因为这个函数是没有开启事务的。
         MediaFiles mediaFiles = mediaFileService.addMediaFilesToDb(companyId, fileMd5, uploadFileParamsDto, bucket_files, objectName);
         UploadFileResultDto uploadFileResultDto = new UploadFileResultDto();
         BeanUtils.copyProperties(mediaFiles, uploadFileResultDto);
@@ -140,8 +151,34 @@ public class MediaFileServiceImpl implements MediaFileService {
                 XueChengPlusException.cast("保存文件信息到数据库失败");
             }
             log.debug("保存文件信息到数据库成功,{}", mediaFiles.toString());
+
+            // 记录待处理任务
+            addWaitingTask(mediaFiles);
         }
         return mediaFiles;
+    }
+
+    /*
+     * @Description: 添加待处理任务
+     * @Author: dengbin
+     * @Date: 6/2/24 14:17
+     * @param mediaFiles:
+     * @return: void
+     **/
+    private void addWaitingTask(MediaFiles mediaFiles) {
+        // 判断如果是Avi视频才写入待处理任务
+        String filename = mediaFiles.getFilename();
+        String extension = filename.substring(filename.lastIndexOf("."));
+        String mimeType = getMimeType(extension);
+        if (mimeType.equals("video/x-msvideo")) {
+            MediaProcess mediaProcess = new MediaProcess();
+            BeanUtils.copyProperties(mediaFiles, mediaProcess);
+            mediaProcess.setStatus("1");
+            mediaProcess.setCreateDate(LocalDateTime.now());
+            mediaProcess.setFailCount(0);// 失败次数默认是0
+            // 向MediaProcess库中插入记录
+            mediaProcessMapper.insert(mediaProcess);
+        }
     }
 
     /*
