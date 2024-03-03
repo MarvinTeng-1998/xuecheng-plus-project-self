@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xuecheng.media.model.po.MediaProcess;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -31,4 +32,16 @@ public interface MediaProcessMapper extends BaseMapper<MediaProcess> {
     List<MediaProcess> selectListBySharedIndex(@Param("shardTotal") int shardTotal,
                                                @Param("shardIndex") int shardIndex,
                                                @Param("count") int count);
+
+    /*
+     * @Description: 开启一个任务
+     * @Author: dengbin
+     * @Date: 3/3/24 16:07
+     * @param id: 任务id
+     * @return: int 更新记录数
+     **/
+    @Update("update media_process m set m.stauts = '4' " +
+            "where (m.status = '1' or m.status = '3') " +
+            "and m.fail < 3 and m.id = #{id}")
+    int startTask(@Param("id") long id);
 }

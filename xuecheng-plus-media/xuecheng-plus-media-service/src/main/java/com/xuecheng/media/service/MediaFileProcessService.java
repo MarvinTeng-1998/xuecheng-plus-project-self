@@ -22,4 +22,25 @@ public interface MediaFileProcessService {
      **/
     List<MediaProcess> getMediaProcessList(int shardIndex, int shardTotal, int count);
 
+    /*
+     * @Description: 开启一个任务
+     * @Author: dengbin
+     * @Date: 3/3/24 16:20
+     * @param id: 任务id
+     * @return: boolean true 开启任务成功 false 开启任务失败
+     **/
+    boolean startTask(long id);
+
+    /*
+     * @Description: 保存任务结果
+     * @Author: dengbin
+     * @Date: 3/3/24 16:23
+     * @param taskId: 任务id
+     * @param status: 任务状态
+     * @param fileId: 文件id
+     * @param url: url
+     * @param errorMsg: 错误信息
+     * @return: void
+     **/
+    void saveProcessFinishStatus(Long taskId, String status, String fileId, String url, String errorMsg);
 }
