@@ -3,6 +3,7 @@ package com.xuecheng.media;
 import com.alibaba.nacos.common.utils.IoUtils;
 import io.minio.*;
 import io.minio.errors.*;
+import io.minio.messages.Item;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,6 +28,26 @@ public class MinioTest {
             .endpoint("http://localhost:9000")
             .credentials("minio", "minio123")
             .build();
+
+    @Test
+    public void clearBucket(){
+        try {
+            // 递归列举某个bucket下的所有文件，然后循环删除
+            Iterable<Result<Item>> iterable = minioClient.listObjects(ListObjectsArgs.builder()
+                    .bucket("video")
+                    .recursive(true)
+                    .build());
+            for (Result<Item> itemResult : iterable) {
+                RemoveObjectArgs removeObjectArgs = RemoveObjectArgs.builder()
+                        .bucket("video")
+                        .object(itemResult.get().objectName())
+                        .build();
+                minioClient.removeObject(removeObjectArgs);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Test
     public void test_upload() throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
@@ -121,5 +142,6 @@ public class MinioTest {
         // Minio的默认的分块大小应该是5M
         minioClient.composeObject(composeObjectArgs);
     }
+
 
 }

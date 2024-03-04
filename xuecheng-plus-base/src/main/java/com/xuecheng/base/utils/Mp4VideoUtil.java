@@ -59,7 +59,8 @@ public class Mp4VideoUtil extends VideoUtil {
         commend.add("753k");
         commend.add("-r");
         commend.add("18");
-        commend.add(mp4folder_path + mp4_name);
+        // commend.add(mp4folder_path + mp4_name);
+        commend.add(mp4folder_path);
         String outstring = null;
         try {
             ProcessBuilder builder = new ProcessBuilder();
@@ -71,25 +72,26 @@ public class Mp4VideoUtil extends VideoUtil {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        Boolean check_video_time = this.check_video_time(video_path, mp4folder_path + mp4_name);
+        // Boolean check_video_time = this.check_video_time(video_path, mp4folder_path + mp4_name);
+        Boolean check_video_time = this.check_video_time(video_path, mp4folder_path);
         if (!check_video_time) {
             return outstring;
         } else {
             return "success";
         }
     }
-
-    public static void main(String[] args) throws IOException {
-        // 源avi视频的路径
-        String video_path = "/Users/dengbin/Desktop/123.mp4";
-        // 转换后mp4文件的名称
-        String avi_name = "123.avi";
-        // //转换后mp4文件的路径
-        String mp4_path = "/Users/dengbin/Desktop/";
-        // 创建工具类对象
-        Mp4VideoUtil videoUtil = new Mp4VideoUtil(ffmpeg_path, video_path, avi_name, mp4_path);
-        // 开始视频转换，成功将返回success
-        String s = videoUtil.generateMp4();
-        System.out.println(s);
-    }
+    //
+    // public static void main(String[] args) throws IOException {
+    //     // 源avi视频的路径
+    //     String video_path = "/Users/dengbin/Desktop/123.mp4";
+    //     // 转换后mp4文件的名称
+    //     String avi_name = "123.avi";
+    //     // //转换后mp4文件的路径
+    //     String mp4_path = "/Users/dengbin/Desktop/";
+    //     // 创建工具类对象
+    //     Mp4VideoUtil videoUtil = new Mp4VideoUtil(ffmpeg_path, video_path, avi_name, mp4_path);
+    //     // 开始视频转换，成功将返回success
+    //     String s = videoUtil.generateMp4();
+    //     System.out.println(s);
+    // }
 }

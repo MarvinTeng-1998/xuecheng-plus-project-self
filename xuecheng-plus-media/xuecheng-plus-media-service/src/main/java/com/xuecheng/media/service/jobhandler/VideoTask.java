@@ -106,7 +106,7 @@ public class VideoTask {
                 String result = "";
                 try {
                     // 开始处理视频
-                    Mp4VideoUtil videoUtil = new Mp4VideoUtil(ffmpegpath, originalFile.getAbsolutePath(), mp4File.getName(), mp4File.getAbsolutePath());
+                    Mp4VideoUtil videoUtil = new Mp4VideoUtil(ffmpegpath, originalFile.getAbsolutePath(), mp4File.getName(),mp4File.getAbsolutePath());
                     result = videoUtil.generateMp4();
                 } catch (Exception e) {
                     log.error("处理视频文件：{}，出错：{}", mediaProcess.getFilePath(), e.getMessage());
