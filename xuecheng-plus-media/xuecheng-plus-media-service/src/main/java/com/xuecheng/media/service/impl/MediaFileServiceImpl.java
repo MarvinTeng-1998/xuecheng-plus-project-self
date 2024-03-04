@@ -1,6 +1,7 @@
 package com.xuecheng.media.service.impl;
 
 import com.alibaba.nacos.common.http.param.MediaType;
+import com.alibaba.nacos.common.utils.IoUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.j256.simplemagic.ContentInfo;
@@ -18,6 +19,7 @@ import com.xuecheng.media.model.po.MediaFiles;
 import com.xuecheng.media.model.po.MediaProcess;
 import com.xuecheng.media.service.MediaFileService;
 import io.minio.*;
+import io.minio.errors.*;
 import io.minio.messages.DeleteError;
 import io.minio.messages.DeleteObject;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +32,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -350,6 +355,32 @@ public class MediaFileServiceImpl implements MediaFileService {
         return RestResponse.success(true);
     }
 
+    @Override
+    public File downloadFileFromMinIO(String bucket, String objectName) {
+        File minioFile = null;
+        FileOutputStream outputStream = null;
+        try {
+            GetObjectArgs getObjectArgs = GetObjectArgs.builder().bucket(bucket).object(objectName).build();
+            FilterInputStream inputStream = minioClient.getObject(getObjectArgs);
+            // 创建临时文件
+            minioFile = File.createTempFile("minio", "merge");
+            outputStream = new FileOutputStream(minioFile);
+            IOUtils.copy(inputStream, outputStream);
+            return minioFile;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (outputStream != null) {
+                try {
+                    outputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
+
     /*
      * @Description: 清理分块文件
      * @Author: dengbin
@@ -424,6 +455,35 @@ public class MediaFileServiceImpl implements MediaFileService {
     }
 
     /*
+     * @Description: 上传文件到Minio
+     * @Author: dengbin
+     * @Date: 14/1/24 11:49
+     * @param localFilePath:
+     * @param mimeType:
+     * @param bucketFiles:
+     * @param objectName:
+     * @return: boolean
+     **/
+    public boolean addMediaFilesToMinio(String localFilePath, String mimeType, String bucketFiles, String objectName) {
+        try {
+            UploadObjectArgs bucket = UploadObjectArgs.builder()
+                    .bucket(bucketFiles)
+                    .filename(localFilePath)
+                    .contentType(mimeType)
+                    .object(objectName)
+                    .build();
+            minioClient.uploadObject(bucket);
+            log.debug("上传文件到minio成功，bucket:{},objectName:{}", bucketFiles, objectName);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("上传文件到minio出错,bucket:{},objectName:{},错误原因:{}", bucketFiles, objectName, e.getMessage(), e);
+            XueChengPlusException.cast("上传文件到文件系统失败");
+        }
+        return false;
+    }
+
+    /*
      * @Description: 得到文件分块后存放的路径
      * @Author: dengbin
      * @Date: 17/1/24 02:27
@@ -446,34 +506,6 @@ public class MediaFileServiceImpl implements MediaFileService {
         return fileMd5.charAt(0) + "/" + fileMd5.charAt(1) + "/" + fileMd5 + "/" + "chunk" + "/";
     }
 
-    /*
-     * @Description: 上传文件到Minio
-     * @Author: dengbin
-     * @Date: 14/1/24 11:49
-     * @param localFilePath:
-     * @param mimeType:
-     * @param bucketFiles:
-     * @param objectName:
-     * @return: boolean
-     **/
-    private boolean addMediaFilesToMinio(String localFilePath, String mimeType, String bucketFiles, String objectName) {
-        try {
-            UploadObjectArgs bucket = UploadObjectArgs.builder()
-                    .bucket(bucketFiles)
-                    .filename(localFilePath)
-                    .contentType(mimeType)
-                    .object(objectName)
-                    .build();
-            minioClient.uploadObject(bucket);
-            log.debug("上传文件到minio成功，bucket:{},objectName:{}", bucketFiles, objectName);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.error("上传文件到minio出错,bucket:{},objectName:{},错误原因:{}", bucketFiles, objectName, e.getMessage(), e);
-            XueChengPlusException.cast("上传文件到文件系统失败");
-        }
-        return false;
-    }
 
     /*
      * @Description: 获取文件的默认存储目录路径 年/月/日

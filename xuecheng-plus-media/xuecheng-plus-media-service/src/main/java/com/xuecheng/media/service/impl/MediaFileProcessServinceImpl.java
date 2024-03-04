@@ -11,6 +11,7 @@ import com.xuecheng.media.service.MediaFileProcessService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -22,6 +23,7 @@ import java.util.List;
  * @create: 2024-03-02 12:39
  **/
 @Slf4j
+@Service
 public class MediaFileProcessServinceImpl implements MediaFileProcessService {
 
     @Autowired
@@ -34,9 +36,9 @@ public class MediaFileProcessServinceImpl implements MediaFileProcessService {
     MediaProcessHistoryMapper mediaProcessHistoryMapper;
 
     @Override
-    public List<MediaProcess> getMediaProcessList(int shardIndex, int shardTotal, int count) {
+    public List<MediaProcess> getMediaProcessList(int shardTotal, int shardIndex, int count) {
 
-        List<MediaProcess> mediaProcesses = mediaProcessMapper.selectListBySharedIndex(shardIndex, shardTotal, count);
+        List<MediaProcess> mediaProcesses = mediaProcessMapper.selectListBySharedIndex(shardTotal, shardIndex, count);
         return mediaProcesses;
 
     }
