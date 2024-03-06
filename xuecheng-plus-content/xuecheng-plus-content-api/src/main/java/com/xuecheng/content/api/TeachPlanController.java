@@ -1,7 +1,9 @@
 package com.xuecheng.content.api;
 
+import com.xuecheng.content.model.dto.BindTeachplanMediaDto;
 import com.xuecheng.content.model.dto.SaveTeachplanDto;
 import com.xuecheng.content.model.dto.TeachPlanDto;
+import com.xuecheng.content.model.po.TeachplanMedia;
 import com.xuecheng.content.service.TeachPlanService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -21,6 +23,19 @@ public class TeachPlanController {
 
     @Autowired
     private TeachPlanService teachPlanService;
+
+    /*
+     * @Description: 课程和媒资信息绑定
+     * @Author: dengbin
+     * @Date: 6/3/24 15:50
+     * @param bindTeachplanMediaDto:
+     * @return: void
+     **/
+    @ApiOperation(value = "课程和媒资信息绑定")
+    @PostMapping("/teachplan/association/media")
+    public TeachplanMedia associateMedia(@RequestBody BindTeachplanMediaDto bindTeachplanMediaDto) {
+        return teachPlanService.associationMedia(bindTeachplanMediaDto);
+    }
 
     /*
      * @Description: 查询课程计划树形结构
@@ -45,7 +60,7 @@ public class TeachPlanController {
      **/
     @ApiOperation("修改课程计划，添加课程计划")
     @PostMapping("/teachplan")
-    public void saveTeachplan(@RequestBody SaveTeachplanDto saveTeachplanDto){
+    public void saveTeachplan(@RequestBody SaveTeachplanDto saveTeachplanDto) {
         teachPlanService.saveTeachplan(saveTeachplanDto);
     }
 
@@ -58,19 +73,19 @@ public class TeachPlanController {
      **/
     @ApiOperation("删除课程计划")
     @DeleteMapping("/teachplan/{teachPlanId}")
-    public void deleteTeachPlan(@PathVariable("teachPlanId") Long teachPlanId){
+    public void deleteTeachPlan(@PathVariable("teachPlanId") Long teachPlanId) {
         teachPlanService.deleteTeachPlan(teachPlanId);
     }
 
     @ApiOperation("课程计划下移")
     @PostMapping("/teachplan/movedown/{teachPlanId}")
-    public void moveDownTeachPlan(@PathVariable("teachPlanId") Long teachPlanId){
+    public void moveDownTeachPlan(@PathVariable("teachPlanId") Long teachPlanId) {
         teachPlanService.moveDownTeachPlan(teachPlanId);
     }
 
     @ApiOperation("课程计划上移")
     @PostMapping("/teachplan/moveup/{teachPlanId}")
-    public void moveUpTeachPlan(@PathVariable("teachPlanId") Long teachPlanId){
+    public void moveUpTeachPlan(@PathVariable("teachPlanId") Long teachPlanId) {
         teachPlanService.moveUpTeachPlan(teachPlanId);
     }
 
