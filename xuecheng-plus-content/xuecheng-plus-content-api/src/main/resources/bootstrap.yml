@@ -17,6 +17,20 @@ spring:
       discovery:
         namespace: dev
         group: xuecheng-plus-project
+      config: #配置文件相关配置
+        namespace: dev
+        group: xuecheng-plus-project
+        file-extension: yaml
+        refresh-enabled: true
+        extension-configs:
+          - data-id: content-service-${spring.profiles.active}.yaml
+            group: xuecheng-plus-project
+            refresh: true
+        shared-configs:
+          - data-id: freemarker-config-dev.yaml
+            group: xuecheng-plus-common
+            refresh: true
+
 # 日志文件配置路径
 logging:
   config: classpath:log4j2-dev.xml
@@ -26,4 +40,5 @@ swagger:
   base-package: com.xuecheng.content
   enabled: true
   version: 1.0.0
+
 

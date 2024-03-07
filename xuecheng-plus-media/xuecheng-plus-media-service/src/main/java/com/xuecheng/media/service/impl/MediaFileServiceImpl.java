@@ -484,6 +484,18 @@ public class MediaFileServiceImpl implements MediaFileService {
     }
 
     /*
+     * @Description: 根据ID查询媒体文件
+     * @Author: dengbin
+     * @Date: 6/3/24 23:54
+     * @param mediaId: 媒体文件ID
+     * @return: com.xuecheng.media.model.po.MediaFiles
+     **/
+    @Override
+    public MediaFiles getFileById(String mediaId) {
+        return mediaFilesMapper.selectById(mediaId);
+    }
+
+    /*
      * @Description: 得到文件分块后存放的路径
      * @Author: dengbin
      * @Date: 17/1/24 02:27

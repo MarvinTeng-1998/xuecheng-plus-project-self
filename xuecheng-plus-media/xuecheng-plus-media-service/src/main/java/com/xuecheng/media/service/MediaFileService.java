@@ -117,4 +117,13 @@ public interface MediaFileService {
      * @return: boolean
      **/
     boolean addMediaFilesToMinio(String localFilePath, String mimeType, String bucketFiles, String objectName);
+
+    /*
+     * @Description: 根据媒体文件ID查询媒体文件
+     * @Author: dengbin
+     * @Date: 6/3/24 23:54
+     * @param mediaId:
+     * @return: com.xuecheng.media.model.po.MediaFiles
+     **/
+    MediaFiles getFileById(String mediaId);
 }

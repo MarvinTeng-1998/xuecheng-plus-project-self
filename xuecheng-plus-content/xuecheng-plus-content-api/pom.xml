@@ -18,6 +18,11 @@
         </dependency>
 
         <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.xuecheng</groupId>
             <artifactId>xuecheng-plus-content-service</artifactId>
             <version>0.0.1-SNAPSHOT</version>
@@ -34,6 +39,11 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <!--SpringBoot 的 Freemarker的渲染层-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-freemarker</artifactId>
+        </dependency>
 
         <!-- 排除 Spring Boot 依赖的日志包冲突 -->
         <dependency>
