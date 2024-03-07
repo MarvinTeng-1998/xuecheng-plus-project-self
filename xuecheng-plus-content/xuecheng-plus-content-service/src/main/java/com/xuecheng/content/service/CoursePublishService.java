@@ -17,4 +17,14 @@ public interface CoursePublishService {
      * @return: com.xuecheng.content.model.dto.CoursePreviewDto
      **/
     public CoursePreviewDto getCoursePreviewInfo(Long courseId);
+
+    /*
+     * @Description: 课程提交审核
+     * @Author: dengbin
+     * @Date: 7/3/24 22:06
+     * @param companyId: 机构ID
+     * @param courseId: 课程ID
+     * @return: void
+     **/
+    public void commitAudit(Long companyId, Long courseId);
 }
