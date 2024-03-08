@@ -27,4 +27,14 @@ public interface CoursePublishService {
      * @return: void
      **/
     public void commitAudit(Long companyId, Long courseId);
+
+    /*
+     * @Description: 课程发布
+     * @Author: dengbin
+     * @Date: 8/3/24 16:04
+     * @param companyId: 机构ID
+     * @param courseId: 课程ID
+     * @return: void
+     **/
+    public void publish(Long companyId, Long courseId);
 }

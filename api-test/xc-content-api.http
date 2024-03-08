@@ -51,3 +51,7 @@ Content-Type: application/json
   "photograph": null
 }
 
+
+### 课程发布
+POST {{content_host}}/content/coursepublish/1
+
