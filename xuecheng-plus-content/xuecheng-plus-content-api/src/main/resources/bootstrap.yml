@@ -30,6 +30,19 @@ spring:
           - data-id: freemarker-config-dev.yaml
             group: xuecheng-plus-common
             refresh: true
+xxl:
+  job:
+    admin:
+      addresses: http://127.0.0.1:8680/xxl-job-admin
+    executor:
+      appname: course-publish-job
+      address:
+      ip:
+      port: 8999
+      logpath: /data/applogs/xxl-job/jobhandler
+      logretentiondays: 30
+    accessToken: default_token
+
 
 # 日志文件配置路径
 logging:

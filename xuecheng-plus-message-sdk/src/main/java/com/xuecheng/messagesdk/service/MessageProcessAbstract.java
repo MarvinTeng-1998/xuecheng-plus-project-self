@@ -47,14 +47,13 @@ public abstract class MessageProcessAbstract {
 
         try {
             //扫描消息表获取任务清单
-            List<MqMessage> messageList = mqMessageService.getMessageList(shardIndex, shardTotal,messageType, count);
+            List<MqMessage> messageList = mqMessageService.getMessageList(shardIndex, shardTotal, messageType, count);
             //任务个数
             int size = messageList.size();
             log.debug("取出待处理消息"+size+"条");
             if(size<=0){
                 return ;
             }
-
             //创建线程池
             ExecutorService threadPool = Executors.newFixedThreadPool(size);
             //计数器
@@ -86,18 +85,12 @@ public abstract class MessageProcessAbstract {
 
                 });
             });
-
             //等待,给一个充裕的超时时间,防止无限等待，到达超时时间还没有处理完成则结束任务
             countDownLatch.await(timeout,TimeUnit.SECONDS);
             System.out.println("结束....");
         } catch (InterruptedException e) {
            e.printStackTrace();
-
         }
 
-
     }
-
-
-
 }
