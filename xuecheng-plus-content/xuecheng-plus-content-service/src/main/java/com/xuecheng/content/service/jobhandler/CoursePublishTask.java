@@ -3,16 +3,17 @@ package com.xuecheng.content.service.jobhandler;
 import com.xuecheng.base.exception.XueChengPlusException;
 import com.xuecheng.content.feignclient.SearchServiceClient;
 import com.xuecheng.content.mapper.CoursePublishMapper;
+import com.xuecheng.content.model.dto.CourseIndex;
 import com.xuecheng.content.model.po.CoursePublish;
 import com.xuecheng.content.service.CoursePublishService;
 import com.xuecheng.messagesdk.model.po.MqMessage;
 import com.xuecheng.messagesdk.service.MessageProcessAbstract;
 import com.xuecheng.messagesdk.service.MqMessageService;
-import com.xuecheng.search.po.CourseIndex;
+
 import com.xxl.job.core.context.XxlJobHelper;
 import com.xxl.job.core.handler.annotation.XxlJob;
 import lombok.extern.slf4j.Slf4j;
-import org.elasticsearch.search.SearchService;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

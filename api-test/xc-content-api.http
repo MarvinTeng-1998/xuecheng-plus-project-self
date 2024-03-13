@@ -85,3 +85,18 @@ Content-Type: application/json
 ### 查看课程
 GET {{search_host}}/search/course/list?pageNo=1&keywords=spring
 Content-Type: application/json
+
+### 密码模式
+POST {{auth_host}}/auth/oauth/token?client_id=XcWebApp&client_secret=XcWebApp&grant_type=password&username=zhangsan&password=123
+
+### 授权码模式
+### 第一步申请授权码(浏览器请求)/oauth/authorize?client_id=c1&response_type=code&scope=all&redirect_uri=http://www.51xuecheng.cn
+### 第二步申请令牌
+POST {{auth_host}}/auth/oauth/token?client_id=XcWebApp&client_secret=XcWebApp&grant_type=authorization_code&code=Gptqwc&redirect_uri=http://www.51xuecheng.cn
+
+### 检验jwt令牌
+POST {{auth_host}}/auth/oauth/check_token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsieHVlY2hlbmctcGx1cyJdLCJ1c2VyX25hbWUiOiJ6aGFuZ3NhbiIsInNjb3BlIjpbImFsbCJdLCJleHAiOjE3MTAzMzkwNjksImF1dGhvcml0aWVzIjpbInAxIl0sImp0aSI6IjVhYzkxYWJmLWM2NWQtNDc2YS1hNGRmLWE0YmQ2ZjgyOGUwYSIsImNsaWVudF9pZCI6IlhjV2ViQXBwIn0.lJW1hGVYS1vMYLpfoAGxBMSQUx7VXipjebxyI4ElSqE
+
+### 携带token访问资源服务
+GET {{gateway_host}}/content/course/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsieHVlY2hlbmctcGx1cyJdLCJ1c2VyX25hbWUiOiJ6aGFuZ3NhbiIsInNjb3BlIjpbImFsbCJdLCJleHAiOjE3MTAzNDY1NzUsImF1dGhvcml0aWVzIjpbInAxIl0sImp0aSI6IjkyNjVlYjRjLWVhOWYtNDQ0NC04NzYwLWJiMGU2MTY2YWRhMSIsImNsaWVudF9pZCI6IlhjV2ViQXBwIn0.F__k5gyVImGt5tGPuOUw3EXaSBzf4CoKUTuTyVfkgEA
