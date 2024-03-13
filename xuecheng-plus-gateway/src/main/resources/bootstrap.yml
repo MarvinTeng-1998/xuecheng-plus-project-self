@@ -31,6 +31,10 @@ spring:
             - Path=/media/**
     #          filters:
     #            - StripPrefix=1
+        - id: search-api
+          uri: lb://search
+          predicates:
+            - Path=/search/**
     nacos:
       server-addr: 127.0.0.1:8848
       discovery:
