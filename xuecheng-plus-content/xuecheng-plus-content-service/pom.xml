@@ -23,6 +23,12 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- 页面渲染模版 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-freemarker</artifactId>
+        </dependency>
+
         <!-- mybatis plus的依赖 -->
         <dependency>
             <groupId>com.baomidou</groupId>
@@ -67,6 +73,36 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j2</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+        <!-- Spring Cloud 微服务远程调用 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-httpclient</artifactId>
+        </dependency>
+        <!--feign支持Multipart格式传参-->
+        <dependency>
+            <groupId>io.github.openfeign.form</groupId>
+            <artifactId>feign-form</artifactId>
+            <version>3.8.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.openfeign.form</groupId>
+            <artifactId>feign-form-spring</artifactId>
+            <version>3.8.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.spring4all</groupId>
+            <artifactId>swagger-spring-boot-starter</artifactId>
+        </dependency>
+
 
     </dependencies>
 </project>

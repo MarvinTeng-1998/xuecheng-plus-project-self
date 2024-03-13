@@ -41,7 +41,8 @@ public class MediaFilesController {
 
     @ApiOperation("上传图片")
     @PostMapping(value = "/upload/coursefile", consumes = MediaType.MULTIPART_FORM_DATA)
-    public UploadFileResultDto upload(@RequestPart("filedata") MultipartFile fileData) throws IOException {
+    public UploadFileResultDto upload(@RequestPart("filedata") MultipartFile fileData,
+                                      @RequestParam(value = "objectName", required = false) String objectName) throws IOException {
         UploadFileParamsDto uploadFileParamsDto = new UploadFileParamsDto();
         uploadFileParamsDto.setFilename(fileData.getOriginalFilename());
         uploadFileParamsDto.setFileSize(fileData.getSize());
@@ -54,7 +55,7 @@ public class MediaFilesController {
         // 文件绝对路径
         String absolutePath = tempFile.getAbsolutePath();
         // 调用service上传图片
-        UploadFileResultDto uploadFileResultDto = mediaFileService.uploadFile(companyId, uploadFileParamsDto, absolutePath);
+        UploadFileResultDto uploadFileResultDto = mediaFileService.uploadFile(companyId, uploadFileParamsDto, absolutePath, objectName);
         return uploadFileResultDto;
     }
 

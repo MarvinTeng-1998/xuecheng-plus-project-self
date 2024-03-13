@@ -2,6 +2,8 @@ package com.xuecheng.content.service;
 
 import com.xuecheng.content.model.dto.CoursePreviewDto;
 
+import java.io.File;
+
 /**
  * @description: 课程发布服务
  * @author: dengbin
@@ -16,7 +18,7 @@ public interface CoursePublishService {
      * @param courseId: 课程ID
      * @return: com.xuecheng.content.model.dto.CoursePreviewDto
      **/
-    public CoursePreviewDto getCoursePreviewInfo(Long courseId);
+     CoursePreviewDto getCoursePreviewInfo(Long courseId);
 
     /*
      * @Description: 课程提交审核
@@ -26,7 +28,7 @@ public interface CoursePublishService {
      * @param courseId: 课程ID
      * @return: void
      **/
-    public void commitAudit(Long companyId, Long courseId);
+     void commitAudit(Long companyId, Long courseId);
 
     /*
      * @Description: 课程发布
@@ -36,5 +38,25 @@ public interface CoursePublishService {
      * @param courseId: 课程ID
      * @return: void
      **/
-    public void publish(Long companyId, Long courseId);
+     void publish(Long companyId, Long courseId);
+
+    /*
+     * @Description: 生成课程静态页面
+     * @Author: dengbin
+     * @Date: 13/3/24 10:21
+     * @param courseId:
+     * @return: java.io.File
+     **/
+     File generateCourseHtml(long courseId);
+
+     /*
+      * @Description: 上传课程静态文件
+      * @Author: dengbin
+      * @Date: 13/3/24 10:33
+      * @param courseId:
+      * @param file:
+      * @return: void
+      **/
+     void uploadCourseHtml(Long courseId, File file);
+
 }

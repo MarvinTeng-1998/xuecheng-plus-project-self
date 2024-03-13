@@ -2,6 +2,7 @@ package com.xuecheng.media.service.impl;
 
 import com.alibaba.nacos.common.http.param.MediaType;
 import com.alibaba.nacos.common.utils.IoUtils;
+import com.alibaba.nacos.common.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.j256.simplemagic.ContentInfo;
@@ -102,7 +103,7 @@ public class MediaFileServiceImpl implements MediaFileService {
      * @return: com.xuecheng.media.model.dto.UploadFileResultDto
      **/
     @Override
-    public UploadFileResultDto uploadFile(Long companyId, UploadFileParamsDto uploadFileParamsDto, String localFilePath) {
+    public UploadFileResultDto uploadFile(Long companyId, UploadFileParamsDto uploadFileParamsDto, String localFilePath, String objectName) {
         File file = new File(localFilePath);
         if (!file.exists()) {
             XueChengPlusException.cast("文件不存在");
@@ -112,7 +113,11 @@ public class MediaFileServiceImpl implements MediaFileService {
         String fileMd5 = getFileMd5(file);
         String mimeType = getMimeType(extension);
         String defaultFolderPath = getDefaultFolderPath();
-        String objectName = defaultFolderPath + fileMd5 + extension;
+        //存储到minio中的对象名(带目录)
+        if(StringUtils.isEmpty(objectName)){
+            objectName =  defaultFolderPath + fileMd5 + extension;
+        }
+        // String objectName = defaultFolderPath + fileMd5 + extension;
         boolean b = addMediaFilesToMinio(localFilePath, mimeType, bucket_files, objectName);
         uploadFileParamsDto.setFileSize(file.length());
         // 这里要进行两部分的数据处理，一部分是加入到MediaFile数据库中，一部分是加到MediaFileProcess中
