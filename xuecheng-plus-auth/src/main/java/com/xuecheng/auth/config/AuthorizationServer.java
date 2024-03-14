@@ -34,19 +34,17 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
 
     // 客户端详情服务
     @Override
-    public void configure(ClientDetailsServiceConfigurer clients)
-            throws Exception {
+    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()// 使用in-memory存储
                 .withClient("XcWebApp")// client_id
-                .secret("XcWebApp")// 客户端密钥
-//                .secret(new BCryptPasswordEncoder().encode("XcWebApp"))//客户端密钥
+//                .secret("secret")//客户端密钥
+                .secret(new BCryptPasswordEncoder().encode("XcWebApp"))// 客户端密钥
                 .resourceIds("xuecheng-plus")// 资源列表
                 .authorizedGrantTypes("authorization_code", "password", "client_credentials", "implicit", "refresh_token")// 该client允许的授权类型authorization_code,password,refresh_token,implicit,client_credentials
                 .scopes("all")// 允许的授权范围
                 .autoApprove(false)// false跳转到授权页面
                 // 客户端接收授权码的重定向地址
-                .redirectUris("http://www.51xuecheng.cn")
-        ;
+                .redirectUris("http://www.51xuecheng.cn");
     }
 
 
