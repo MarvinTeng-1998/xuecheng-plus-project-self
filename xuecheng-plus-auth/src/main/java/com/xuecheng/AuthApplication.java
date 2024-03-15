@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootApplication
+@EnableFeignClients(basePackages = {"com.xuecheng.*.feignclient"})
 public class AuthApplication {
 
     public static void main(String[] args) {

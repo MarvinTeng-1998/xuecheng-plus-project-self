@@ -1,6 +1,7 @@
 package com.xuecheng.ucenter.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.xuecheng.ucenter.feignclient.CheckCodeClient;
 import com.xuecheng.ucenter.mapper.XcUserMapper;
 import com.xuecheng.ucenter.model.dto.AuthParamsDto;
 import com.xuecheng.ucenter.model.dto.XcUserExt;
@@ -10,6 +11,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 /**
  * @description: 账号密码认证
@@ -25,9 +27,24 @@ public class PasswordAuthServiceImpl implements AuthService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @Autowired
+    CheckCodeClient checkCodeClient;
+
 
     @Override
     public XcUserExt execute(AuthParamsDto authParamsDto) {
+
+        // 校验验证码
+        String checkcode = authParamsDto.getCheckcode();
+        String checkcodekey = authParamsDto.getCheckcodekey();
+
+        if (StringUtils.isEmpty(checkcodekey) || StringUtils.isEmpty(checkcode)) {
+            throw new RuntimeException("验证码为空");
+        }
+        boolean verify = checkCodeClient.verify(checkcodekey, checkcode);
+        if (!verify) {
+            throw new RuntimeException("验证码输入错误！");
+        }
 
         // 账号
         String username = authParamsDto.getUsername();

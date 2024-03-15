@@ -30,6 +30,10 @@ spring:
           uri: lb://auth-service
           predicates:
             - Path=/auth/**
+        - id: checkcode
+          uri: lb://checkcode
+          predicates:
+            - Path=/checkcode/**
     nacos:
       server-addr: 127.0.0.1:8848
       discovery:
